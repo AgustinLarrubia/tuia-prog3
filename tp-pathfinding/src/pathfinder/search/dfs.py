@@ -19,32 +19,32 @@ class DepthFirstSearch:
         root = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
         # Initialize expanded with the empty dictionary
-        reached = dict()
+        expanded = dict()
 
         # Initialize frontier with the root node
         frontier = StackFrontier()
         frontier.add(root)
 
         if grid.objective_test(root.state):
-            return Solution(root, reached)
+            return Solution(root, expanded)
         
         while True:
 
             if frontier.is_empty():
-                return NoSolution(reached)
+                return NoSolution(expanded)
 
             node = frontier.remove()
 
-            if node.state in reached:
+            if node.state in expanded:
                 continue
 
-            reached[node.state] = True
+            expanded[node.state] = True
 
             for action in grid.actions(node.state):
 
                 successor = grid.result(node.state, action)
 
-                if successor not in reached:
+                if successor not in expanded:
 
                     son = Node(
                         "",
@@ -55,8 +55,8 @@ class DepthFirstSearch:
                     )
 
                     if grid.objective_test(successor):
-                        return Solution(son, reached)
+                        return Solution(son, expanded)
 
                     frontier.add(son)
 
-        return NoSolution(reached)
+        return NoSolution(expanded)
