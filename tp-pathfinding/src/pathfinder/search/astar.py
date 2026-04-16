@@ -18,12 +18,30 @@ class AStarSearch:
         # Initialize root node
         root = Node("", state=grid.initial, cost=0, parent=None, action=None)
 
+                # Initialize frontier with the root node
+        frontier = PriorityQueueFrontier()
+        frontier.add(root, root.cost + grid.h(root.state))
+
         # Initialize reached with the initial state
         reached = {}
         reached[root.state] = root.cost
 
-        # Initialize frontier with the root node
-        # TODO Complete the rest!!
-        # ...
+        while True:
+            
+            if frontier.is_empty():
+                return NoSolution(reached)
+            
+            n = frontier.pop()
 
-        return NoSolution(reached)
+            if grid.objective_test(n.state):
+                return Solution(n, reached)
+            
+            for a in grid.actions(n.state):
+
+                s1 = grid.result(n.state, a)
+                c1 = n.cost + grid.individual_cost(n.state, a)
+
+                if s1 not in reached or c1 < reached[s1]:
+                    n1 = Node("", s1, c1, n, a)
+                    reached[s1] = c1
+                    frontier.add(n1, n1.cost + grid.h(n1.state))
