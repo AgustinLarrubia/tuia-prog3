@@ -111,3 +111,10 @@ class Grid:
 
     def __repr__(self) -> str:
         return f"Grid([[...], ...], {self.initial}, {self.end})"
+    
+    def h(self, pos: tuple[int,int]) -> int:
+        """
+        Estimación del costo para llegar desde el estado actual hasta el objetivo.
+        Se mida con la distancia de Manhattan
+        """
+        return abs(self.end[0] - pos[0]) + abs(self.end[1] - pos[1])
